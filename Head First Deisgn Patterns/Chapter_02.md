@@ -16,3 +16,13 @@
    1. **java.util 패키지**에서 Observable과 Observe **"클래스"**가 있다.
    2. Observable 클래스의 **setChanged() 메서드를 호출**하여 객체의 상태가 바뀌었다는 것을 알림
    3. notifyObservers() 또는 notifiyObservers(Object arg)를 호출 arg -> 전달할 임의의 데이터 객체 
+   4. 단점
+      * 클래스이므로 **재사용성에 제약**
+      * setChanged() 메서드가 protected로 선언되어 있어 외부에서 호출할 수 없다.
+
+1. **JAVA GUI**
+   * ActionListener로 옵저버를 구현함
+
+1. **핵심 정리**
+   * 옵저버가 데이터를 가져오는 **풀 방식**이 옳은 방식으로 간주됨
+   * 연락을 돌리는 **순서에 의존하면 안된다.**
