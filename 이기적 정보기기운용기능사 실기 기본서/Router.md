@@ -1,0 +1,54 @@
+# Router
+
+### Inter-VLAN
+* 하나의 네트워크 토폴로지에서 소속 PC들의 데이터 전송 편리성을 위하여 **VLAN을 설정할 경우** 상호 간에 **데이터 패킷을 전송하기 위한 경로를 라우터에 설정**해 주는 것
+
+1. Sub-Interface 설정
+   * > interface fa 0/0.[VLAN] <br>
+     > interface fa 0/0.10
+
+2. 802.1q 설정 및 IP 주소 지정
+   * sub-interface에 접속 후
+   * > encapsulation dot1Q [VLAN]
+   * IP 주소 지정
+   * > ip add [IP] [Sub-mask]
+
+3. DCE-DTE 구성
+   * **DCE(회선 종단장치)와 DTE(데이터 단말 장치)**는 <br> 
+    **여러 대의 라우터가 연결**되는 광대역 네트워크 설정 시 **클럭 신호를 설정하여 전송하는 DCE**, **클럭 신호를 받아서 해석하는 DTE**를 설정해야 한다.
+   * >clock rate [값] (config-if 모드)
+
+### 전송 프로토콜 설정
+* WAN 프로토콜은 Frame Relay, HDLC, PPP 등이 있다.
+
+* PPP PAP
+  * PAP는 이종 간의 장비에서 **접속을 원하는 라우터**는 자신의 Hostname/Password 정보를 압축하여 상대방 라우터에게 보내고,  
+    **상대방 라우터**는 자신이 저장하고 있는 Hostname/Password 정보와 비교하여 접속을 인증하는 방식 **(보안에 취약함)**
+  * > encapsulation ppp (config-if 모드)  
+    > ppp authentication pap  
+    > ppp pap sent-username [이름] password [암호]
+
+* PPP CHAP
+  * PAP와 다르게 중간에 해킹할 수 없도록 **암호화하여 패킷을 전송**하는 방식  
+    3-Way Hansaking 방식으로 암호화하여 접속 인증
+  * 먼저 로컬 이름과 암호 설정 후
+  * > encapsulation ppp (config-if 모드)  
+    > ppp authentication chap
+
+### Passive-Interface 설정
+* 기본적인 라우터의 전송 기능에서 **지정한 인터페이스로 전송하는 것을 중지**시켜 **특정 인터페이스로 정보를 전송하지 않게 하는** 설정
+* > passive-interface [Interface-Type] [interface-Number] (config-router 모드)
+
+### SSH 접속 설정
+* 도메인 네임
+    > ip domain-name [도메인 이름] (config 모드)
+* RSA 암호화 기법
+    > crypto key generate rsa [modulus 암호키 길이(생략 가능)]
+* SHH 접속 시 아이디와 암호 설정
+    > username [ID] (privilege [0~15]) password [PW]  ()=생략 가능
+* 원격 접속으로 접속할 수 있는 인원을 설정
+    > line vty 0 [접속 인원]
+* 설정 값을 원격 접속으로 지정
+    > login local (config-line 모드)
+* SSH로만 접속을 허용 (telent은 접속이 안되게 설정)
+    > transport input ssh
